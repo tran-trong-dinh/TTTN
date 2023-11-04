@@ -1,0 +1,16 @@
+- Lọc: danh mục, giá.
+- Tìm kiếm : tên sản phẩm, danh mục .
+- đăng nhập : email or username , password
+- trang quản trị:
+	Thống kê doanh thu, đơn hàng khách hàng
+	Thêm sửa xóa sản phẩm
+	Nhận feedback
+	Thêm sửa xóa khuyến mãi
+	Thêm sửa xóa danh mục
+
+- trang cá nhân người dùng: xem thông tin , sửa tên địa chỉ, password.
+- trang chủ : navbar , banner , danh sách  sản phẩm ( theo danh mục), liên hệ feedback, footer.
+- chi tiết sản phẩm: hình ảnh sản phẩm, tên, giá cũ giá mới, mã giảm giá , chi tiết sản phẩm, 2 nút thêm vào giỏ hàng và mua ngay , nhận xét đánh giá.
+- trang chính sách đổi trả bảo hành vận chuyển.
+- giỏ hàng(nằm trên thanh navbar).
+
