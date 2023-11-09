@@ -6,7 +6,7 @@ dotenv.config();
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "",
+  password: "huycool2311",
   database: "shopdienthoai",
 });
 export default db;
