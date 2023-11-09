@@ -50,6 +50,8 @@ const SingleProduct = () => {
 
             <span className="desc">{product.description}</span>
 
+            <span className="desc">Stock: {product.stock}</span>
+
             <div className="cart-buttons">
               <div className="quantity-buttons">
                 <span onClick={decQty}>-</span>

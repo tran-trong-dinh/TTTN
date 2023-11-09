@@ -1,7 +1,7 @@
 import db from "../connectDB.js";
 import asyncHandler from "express-async-handler";
 
-export const addToOrder = asyncHandler(async (req, res) => {
+export const addToOrder = asyncHandler((req, res) => {
   const { user_id } = req.user;
 
   const { products, total_price } = req.body;
@@ -12,19 +12,10 @@ export const addToOrder = asyncHandler(async (req, res) => {
     const orderId = data.insertId;
     products.forEach((product) => {
       const q1 =
-        "INSERT INTO order_details(`order_id`, `product_id`, `quantity`, `price`) VALUES (?,?,?,?)";
-      db.query(
-        q1,
-        [
-          orderId,
-          product.product_id,
-          product.quantity,
-          product.new_price * product.quantity,
-        ],
-        (err, data) => {
-          if (err) return res.json(err);
-        }
-      );
+        "INSERT INTO order_details(`order_id`, `product_id`, `quantity`) VALUES (?,?,?) ";
+      db.query(q1, [orderId, product.product_id, product.quantity]);
+      const q2 = "UPDATE products SET `stock`= ? WHERE `product_id`= ?";
+      db.query(q2, [product.stock - product.quantity, product.product_id]);
     });
     res.status(200).json("Order has been created");
   });

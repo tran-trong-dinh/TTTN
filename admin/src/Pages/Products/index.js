@@ -27,6 +27,7 @@ function Products() {
   const [categories, setCategories] = useState([]);
   const [promotions, setPromotions] = useState([]);
   const [categoryId, setCategoryId] = useState("");
+  const [stock, setStock] = useState(0);
   const [promotionId, setPromotionId] = useState("");
   const [updateOpen, setUpdateOpen] = useState(false);
   const [product, setProduct] = useState({});
@@ -51,18 +52,19 @@ function Products() {
   };
 
   const handleSubmit = () => {
-    console.log(typeof promotionId);
+    console.log(typeof stock);
     axios
       .post("/product/create-product", {
         product_name: productName,
         image_url: imageAsset,
         old_price: price,
         description: description,
+        stock: Number(stock),
         category_id: categoryId,
         promotion_id: promotionId,
       })
       .then((res) => {
-        alert("create success");
+        alert(res.data);
         window.location.reload();
       });
   };
@@ -155,6 +157,11 @@ function Products() {
             dataIndex: "category_name",
           },
           {
+            title: "Stock",
+            dataIndex: "stock",
+          },
+
+          {
             title: "Promotion",
             dataIndex: "promotion_code",
           },
@@ -218,6 +225,9 @@ function Products() {
 
           <Form.Item label="Description" name="description">
             <TextArea onChange={(e) => setDescription(e.target.value)} />
+          </Form.Item>
+          <Form.Item label="Stock" name="stock">
+            <Input onChange={(e) => setStock(e.target.value)} />
           </Form.Item>
 
           <Form.Item label="Category" name="category_id">
