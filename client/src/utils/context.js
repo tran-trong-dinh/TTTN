@@ -111,25 +111,46 @@ const AppContext = ({ children }) => {
   }, []);
 
   const onAdd = (product, quantity) => {
-    const checkProductInCart = cartItems.find(
-      (item) => item.product_id === product.product_id
-    );
-    setTotalPrice(
-      (prevTotalPrice) => prevTotalPrice + product.new_price * quantity
-    );
-    setTotalQuantities((prevTotalQuantities) => prevTotalQuantities + quantity);
-    if (checkProductInCart) {
-      const updatedCartItems = cartItems.map((cartProduct) => {
-        if (cartProduct.product_id === product.product_id)
-          return {
-            ...cartProduct,
-            quantity: cartProduct.quantity + quantity,
-          };
-      });
-      setCartItems(updatedCartItems);
+    if (quantity > product.stock) {
+      alert("out of stock");
     } else {
-      product.quantity = quantity;
-      setCartItems([...cartItems, { ...product }]);
+      const checkProductInCart = cartItems.find(
+        (item) => item.product_id === product.product_id
+      );
+      setTotalPrice(
+        (prevTotalPrice) => prevTotalPrice + product.new_price * quantity
+      );
+      setTotalQuantities(
+        (prevTotalQuantities) => prevTotalQuantities + quantity
+      );
+      if (checkProductInCart) {
+        const updatedCartItems = cartItems.map((cartProduct) => {
+          if (cartProduct.product_id === product.product_id)
+            if (cartProduct.quantity + quantity > product.stock) {
+              alert("out of stock");
+              setTotalPrice(
+                (prevTotalPrice) =>
+                  prevTotalPrice - cartProduct.new_price * quantity
+              );
+              setTotalQuantities(
+                (prevTotalQuantities) => prevTotalQuantities - quantity
+              );
+              return {
+                ...cartProduct,
+                quantity: cartProduct.quantity,
+              };
+            } else {
+              return {
+                ...cartProduct,
+                quantity: cartProduct.quantity + quantity,
+              };
+            }
+        });
+        setCartItems(updatedCartItems);
+      } else {
+        product.quantity = quantity;
+        setCartItems([...cartItems, { ...product }]);
+      }
     }
   };
   const onRemove = (product) => {
@@ -154,14 +175,18 @@ const AppContext = ({ children }) => {
     index = cartItems.findIndex((product) => product.product_id === id);
     const newCartItems = cartItems.filter((item) => item.product_id !== id);
     if (value === "inc") {
-      setCartItems([
-        ...newCartItems,
-        { ...foundProduct, quantity: foundProduct.quantity + 1 },
-      ]);
-      setTotalPrice(
-        (prevTotalPrice) => prevTotalPrice + foundProduct.new_price
-      );
-      setTotalQuantities((prevTotalQuantities) => prevTotalQuantities + 1);
+      if (foundProduct.quantity + 1 > foundProduct.stock) {
+        alert("Out of stock");
+      } else {
+        setCartItems([
+          ...newCartItems,
+          { ...foundProduct, quantity: foundProduct.quantity + 1 },
+        ]);
+        setTotalPrice(
+          (prevTotalPrice) => prevTotalPrice + foundProduct.new_price
+        );
+        setTotalQuantities((prevTotalQuantities) => prevTotalQuantities + 1);
+      }
     } else if (value === "dec") {
       if (foundProduct.quantity > 1) {
         setCartItems([
