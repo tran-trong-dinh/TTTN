@@ -17,7 +17,7 @@ const SingleProduct = () => {
   const { onAdd, decQty, incQty, qty } = useContext(Context);
   useEffect(() => {
     axios.get(`/product/get-detail-product/${id}`).then((res) => {
-      setProduct(res.data[0]);
+      setProduct(res.data);
     });
   }, [id]);
 

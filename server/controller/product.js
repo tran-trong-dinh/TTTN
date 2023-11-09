@@ -74,14 +74,13 @@ export const getProductsFromCategory = asyncHandler((req, res) => {
 
 export const updateProduct = asyncHandler((req, res) => {
   const { id } = req.params;
-  const { product_name, old_price, description, image_url, category_id } =
-    req.body;
+  const { product_name, old_price, description, image_url } = req.body;
   const q =
-    "UPDATE products SET `product_name` = ?, `old_price` = ?, `description` = ?, `image_url` = ?, `category_id`= ? WHERE product_id = ?";
+    "UPDATE products SET `product_name` = ?, `old_price` = ?, `description` = ?, `image_url` = ? WHERE product_id = ?";
 
   db.query(
     q,
-    [product_name, old_price, description, image_url, category_id, id],
+    [product_name, old_price, description, image_url, id],
     (err, data) => {
       if (err) return res.json(err);
       return res.status(200).json("Product has been updated");
@@ -102,7 +101,7 @@ export const getDetailProduct = asyncHandler((req, res) => {
   const q = "SELECT * FROM products WHERE product_id = ?";
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.json(err);
-    return res.status(200).json(data);
+    return res.status(200).json(data[0]);
   });
 });
 

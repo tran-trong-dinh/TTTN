@@ -37,7 +37,14 @@
           outline: none;
           font-size: 16px;
         }
+       
       }
+      .input-fullname,.input-email,.input-message,.input-subject{
+        span{
+          color: red;
+        }
+      }
+      
       input {
         width: 100%;
         padding: 8px 16px;

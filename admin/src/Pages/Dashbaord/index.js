@@ -143,12 +143,12 @@ function DashboardChart() {
   });
 
   useEffect(() => {
-    getRevenue().then((res) => {
-      const labels = res.carts.map((cart) => {
-        return `User-${cart.userId}`;
+    axios.get("/order/statistical").then((res) => {
+      const labels = res.data.map((cart) => {
+        return cart.month;
       });
-      const data = res.carts.map((cart) => {
-        return cart.discountedTotal;
+      const data = res.data.map((cart) => {
+        return cart.total_revenue;
       });
 
       const dataSource = {

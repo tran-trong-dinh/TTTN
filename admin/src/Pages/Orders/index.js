@@ -9,7 +9,6 @@ function Orders() {
   useEffect(() => {
     setLoading(true);
     axios.get("/order/get-all-order").then((res) => {
-      console.log(res)
       setDataSource(res.data);
       setLoading(false);
     });

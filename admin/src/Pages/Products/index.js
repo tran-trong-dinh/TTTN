@@ -28,6 +28,12 @@ function Products() {
   const [promotions, setPromotions] = useState([]);
   const [categoryId, setCategoryId] = useState("");
   const [promotionId, setPromotionId] = useState("");
+  const [updateOpen, setUpdateOpen] = useState(false);
+  const [product, setProduct] = useState({});
+  const [updateProductName, setUpdateProductName] = useState("");
+  const [updateOldPrice, setUpdateOldPrice] = useState("");
+  const [updateDescription, setUpdateDescription] = useState("");
+  const [updateImageUrl, setUpdateImageUrl] = useState("");
   const handleUpload = (e) => {
     const files = e.target.files;
     const data = new FormData();
@@ -66,10 +72,31 @@ function Products() {
       window.location.reload();
     });
   };
+
+  const handleOpenUpdate = (product_id) => {
+    setUpdateOpen(true);
+    axios.get(`/product/get-detail-product/${product_id}`).then((res) => {
+      setProduct(res.data);
+    });
+  };
+
+  const handleUpdate = (product_id) => {
+    axios
+      .post(`/product/update-product/${product_id}`, {
+        product_name: updateProductName,
+        old_price: updateOldPrice,
+        description: updateDescription,
+        image_url: updateImageUrl,
+      })
+      .then((res) => {
+        alert("update success");
+        window.location.reload();
+      });
+  };
   useEffect(() => {
     setLoading(true);
     axios.get("/product/get-products").then((res) => {
-      console.log(res)
+      console.log(res);
       setDataSource(res.data);
 
       setLoading(false);
@@ -98,6 +125,8 @@ function Products() {
       </Space>
       <Table
         loading={loading}
+        size="large"
+        tableLayout="fixed"
         columns={[
           {
             title: "Image",
@@ -141,7 +170,12 @@ function Products() {
             dataIndex: "product_id",
             key: "x",
             render: (product_id) => (
-              <button onClick={() => handleRemove(product_id)}>Delete</button>
+              <>
+                <button onClick={() => handleRemove(product_id)}>Delete</button>
+                <button onClick={() => handleOpenUpdate(product_id)}>
+                  Update
+                </button>
+              </>
             ),
           },
         ]}
@@ -218,6 +252,43 @@ function Products() {
             </Button>
           </Form.Item>
         </Form>
+      </Drawer>
+
+      <Drawer
+        size="large"
+        title="Update Product"
+        open={updateOpen}
+        onClose={() => {
+          setUpdateOpen(false);
+        }}
+        maskClosable
+      >
+        <div>
+          <input
+            type="text"
+            value={product.product_name}
+            onChange={(e) => setUpdateProductName(e.target.value)}
+          />
+          <input
+            type="text"
+            value={product.old_price}
+            onChange={(e) => setUpdateOldPrice(e.target.value)}
+          />
+          <input
+            type="text"
+            value={product.description}
+            onChange={(e) => setUpdateDescription(e.target.value)}
+          />
+          <input
+            type="text"
+            value={product.image_url}
+            onChange={(e) => setUpdateImageUrl(e.target.value)}
+          />
+
+          <button onClick={() => handleUpdate(product.product_id)}>
+            Update
+          </button>
+        </div>
       </Drawer>
     </Space>
   );

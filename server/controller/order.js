@@ -7,13 +7,13 @@ export const addToOrder = asyncHandler(async (req, res) => {
   const { products, total_price } = req.body;
 
   const q = "INSERT INTO orders(`user_id`, `total_price`) VALUES (?,?)";
-  await db.query(q, [user_id, total_price], (err, data) => {
+  db.query(q, [user_id, total_price], (err, data) => {
     if (err) return res.json(err);
     const orderId = data.insertId;
-    products.forEach(async (product) => {
+    products.forEach((product) => {
       const q1 =
         "INSERT INTO order_details(`order_id`, `product_id`, `quantity`, `price`) VALUES (?,?,?,?)";
-      await db.query(
+      db.query(
         q1,
         [
           orderId,
@@ -31,7 +31,7 @@ export const addToOrder = asyncHandler(async (req, res) => {
 });
 export const getAllOrder = asyncHandler(async (req, res) => {
   const q =
-    "SELECT *  FROM orders INNER JOIN users ON orders.user_id = users.user_id INNER JOIN order_details ON orders.order_id = order_details.order_id INNER JOIN products ON order_details.product_id = products.product_id  ORDER BY orders.order_date DESC";
+    "SELECT * FROM orders INNER JOIN users ON orders.user_id = users.user_id INNER JOIN order_details ON orders.order_id = order_details.order_id INNER JOIN products ON order_details.product_id = products.product_id ORDER BY orders.order_date";
   db.query(q, (err, data) => {
     if (err) return res.json(err);
     const total = data.length;
@@ -44,5 +44,14 @@ export const deleteOrder = asyncHandler(async (req, res) => {
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.json(err);
     return res.status(200).json("Order has been deleted");
+  });
+});
+
+export const statistical = asyncHandler(async (req, res) => {
+  const q =
+    "SELECT DATE_FORMAT(order_date, '%Y-%m') AS month, SUM(total_price) AS total_revenue FROM orders GROUP BY DATE_FORMAT(order_date, '%Y-%m')";
+  db.query(q, (err, data) => {
+    if (err) return res.json(err);
+    return res.status(200).json(data);
   });
 });
