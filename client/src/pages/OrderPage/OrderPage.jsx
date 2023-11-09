@@ -11,6 +11,59 @@ import { IoLocationSharp } from "react-icons/io5";
 const OrderPage = () => {
   const { user, totalPrice, cartItems, setShowCart } = useContext(Context);
   const navigate = useNavigate();
+  // const host = "https://provinces.open-api.vn/api/";
+  // const callAPI = (api) => {
+  //   return axios.get(api).then((response) => {
+  //     renderData(response.data, "province");
+  //   });
+  // };
+  // callAPI("https://provinces.open-api.vn/api/?depth=1");
+  // const callApiDistrict = (api) => {
+  //   return axios.get(api).then((response) => {
+  //     renderData(response.data.districts, "district");
+  //   });
+  // };
+  // const callApiWard = (api) => {
+  //   return axios.get(api).then((response) => {
+  //     renderData(response.data.wards, "ward");
+  //   });
+  // };
+
+  //  const renderData = (array, select) => {
+  //   let row = ' <option disable value="">chọn</option>';
+  //   array.forEach((element) => {
+  //     row += `<option value="${element.code}">${element.name}</option>`;
+  //   });
+  //   document.querySelector("#" + select).innerHTML = row;
+  // };
+
+  // $("#province").change(() => {
+  //   callApiDistrict(host + "p/" + $("#province").val() + "?depth=2");
+  //   printResult();
+  // });
+  // $("#district").change(() => {
+  //   callApiWard(host + "d/" + $("#district").val() + "?depth=2");
+  //   printResult();
+  // });
+  // $("#ward").change(() => {
+  //   printResult();
+  // });
+
+  // const printResult = () => {
+  //   if (
+  //     $("#district").val() != "" &&
+  //     $("#province").val() != "" &&
+  //     $("#ward").val() != ""
+  //   ) {
+  //     let result =
+  //       $("#province option:selected").text() +
+  //       " | " +
+  //       $("#district option:selected").text() +
+  //       " | " +
+  //       $("#ward option:selected").text();
+  //     $("#result").text(result);
+  //   }
+  // };
   const handlePay = () => {
     setShowCart(false);
     if (!user) {
@@ -32,7 +85,7 @@ const OrderPage = () => {
     <div className="order-container">
       <div className="order-wrapper">
         <div className="info-user">
-          <h2>Thông tin thanh toán</h2>
+          <h2>Thông tin khách hàng</h2>
           <div className="edit-profile-content">
             <div className="edit-profile-info">
               <div className="heading">
@@ -55,12 +108,55 @@ const OrderPage = () => {
               </div>
               <p className="input-edit-profile">{user?.data?.phone}</p>
             </div>
-            <div className="edit-profile-info">
+            {/* <div className="edit-profile-info">
               <div className="heading">
                 <h2>Address</h2>
                 <IoLocationSharp />
               </div>
               <p className="input-edit-profile">{user?.data?.address}</p>
+            </div> */}
+          </div>
+        </div>
+
+        <div className="info-user">
+          <h2>Thông tin nhận hàng</h2>
+          <div className="edit-profile-content">
+            <div className="edit-profile-info">
+              <div className="heading">
+                <h2>Tỉnh</h2>
+              </div>
+              {/* <p className="input-edit-profile">{user?.data?.full_name}</p> */}
+              <select
+                className="input-edit-profile"
+                name=""
+                id="province"
+              ></select>
+            </div>
+            <div className="edit-profile-info">
+              <div className="heading">
+                <h2>Huyện</h2>
+              </div>
+              {/* <p className="input-edit-profile">{user?.data?.full_name}</p> */}
+              <select className="input-edit-profile" name="" id="district">
+                <option value="">chọn quận</option>
+              </select>
+            </div>
+            <div className="edit-profile-info">
+              <div className="heading">
+                <h2>Xã</h2>
+              </div>
+              {/* <p className="input-edit-profile">{user?.data?.full_name}</p> */}
+              <select className="input-edit-profile" name="" id="ward">
+                <option value="">chọn phường</option>
+              </select>
+            </div>
+
+            <div className="edit-profile-info">
+              <div className="heading">
+                <h2>Địa chỉ cụ thể</h2>
+                <IoLocationSharp />
+              </div>
+              <input className="input-edit-profile"></input>
             </div>
           </div>
         </div>
