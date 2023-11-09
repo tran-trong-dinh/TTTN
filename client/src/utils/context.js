@@ -39,14 +39,16 @@ const AppContext = ({ children }) => {
 
   // Xử lý khi nhấp vào nút lọc
   const handleFilterClick = (listProducts) => {
-    const filteredProducts = listProducts.filter((product) => {
+    const filteredProducts = listProducts
+      .filter((product) => {
         // Kiểm tra category
         if (filterCategories == "All") {
           return true; // Nếu categoryFilter là 'all' thì giữ lại tất cả sản phẩm
         } else {
           return product.category_name.includes(filterCategories); // Nếu không, chỉ giữ lại sản phẩm có category trùng khớp
         }
-      }).filter((product) => {
+      })
+      .filter((product) => {
         // Kiểm tra price
         if (minPrice === "" && maxPrice === "") {
           return true; // Nếu không có minPrice và maxPrice thì giữ lại tất cả sản phẩm
@@ -61,16 +63,14 @@ const AppContext = ({ children }) => {
         }
       });
 
-    
-    setFilterProducts(filteredProducts);            
-  console.log(filteredProducts)
+    setFilterProducts(filteredProducts);
+    console.log(filteredProducts);
   };
   const handleCategoryChange = (e) => {
     const selectedCategories = Array.from(
       e.target.selectedOptions,
       (option) => option.value
     );
-
 
     setFilterCategories(selectedCategories);
   };

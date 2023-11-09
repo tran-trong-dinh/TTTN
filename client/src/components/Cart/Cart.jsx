@@ -18,7 +18,6 @@ const Cart = () => {
     totalPrice,
     totalQuantities,
     cartItems,
-
     setShowCart,
     toggleCartItemQuantity,
     onRemove,
