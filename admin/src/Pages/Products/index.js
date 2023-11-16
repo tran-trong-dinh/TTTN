@@ -2,6 +2,7 @@ import {
   Avatar,
   Button,
   Drawer,
+  Flex,
   Form,
   Image,
   Input,
@@ -35,22 +36,23 @@ function Products() {
   const [updateOldPrice, setUpdateOldPrice] = useState("");
   const [updateDescription, setUpdateDescription] = useState("");
   const [updateImageUrl, setUpdateImageUrl] = useState("");
-  const handleUpload = (e) => {
+  const handleUpload = async (e) => {
     const files = e.target.files;
     const data = new FormData();
     // Append only the first file to the FormData object
     data.append("photo", files[0]);
-    axios
-      .post("/upload", data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
-      .then((res) => {
-        const filename = res.data.secure_url;
-
-        setImageAsset(filename);
-      });
+    const promiseUpload = await axios.post("/upload", data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return promiseUpload;
   };
 
+  useEffect(() => {
+    setUpdateProductName(product.product_name);
+    setUpdateOldPrice(product.old_price);
+    setUpdateDescription(product.description);
+    setUpdateImageUrl(product.image_url);
+  }, [product]);
   const handleSubmit = () => {
     console.log(typeof stock);
     axios
@@ -134,7 +136,7 @@ function Products() {
             title: "Image",
             dataIndex: "image_url",
             render: (image_url) => {
-              return <Avatar src={image_url} />;
+              return <Image src={image_url} preview={false} />;
             },
           },
           {
@@ -215,7 +217,15 @@ function Products() {
             {imageAsset && <Image width={200} src={imageAsset} />}
 
             <div>
-              <input type="file" onChange={handleUpload} />
+              <input
+                type="file"
+                onChange={(e) => {
+                  handleUpload(e).then((res) => {
+                    const filename = res.data.secure_url;
+                    setImageAsset(filename);
+                  });
+                }}
+              />
             </div>
           </Form.Item>
 
@@ -273,32 +283,49 @@ function Products() {
         }}
         maskClosable
       >
-        <div>
-          <input
-            type="text"
-            value={product.product_name}
-            onChange={(e) => setUpdateProductName(e.target.value)}
-          />
-          <input
-            type="text"
-            value={product.old_price}
-            onChange={(e) => setUpdateOldPrice(e.target.value)}
-          />
-          <input
-            type="text"
-            value={product.description}
-            onChange={(e) => setUpdateDescription(e.target.value)}
-          />
-          <input
-            type="text"
-            value={product.image_url}
-            onChange={(e) => setUpdateImageUrl(e.target.value)}
-          />
+        <Flex vertical gap={20}>
+          <Flex vertical gap={5}>
+            <label>Product name</label>
+            <Input
+              type="text"
+              value={updateProductName}
+              onChange={(e) => setUpdateProductName(e.target.value)}
+            />
+          </Flex>
+          <Flex vertical gap={5}>
+            <label>Old price</label>
+            <Input
+              type="text"
+              value={updateOldPrice}
+              onChange={(e) => setUpdateOldPrice(e.target.value)}
+            />
+          </Flex>
+          <Flex vertical gap={5}>
+            <label>Description</label>
+            <Input
+              type="text"
+              value={updateDescription}
+              onChange={(e) => setUpdateDescription(e.target.value)}
+            />
+          </Flex>
+          <Flex vertical gap={5}>
+            <label>Image</label>
+            <input
+              type="file"
+              onChange={(e) => {
+                handleUpload(e).then((res) => {
+                  const filename = res.data.secure_url;
+                  setUpdateImageUrl(filename);
+                });
+              }}
+            />
+            {updateImageUrl && <Image width={200} src={updateImageUrl} />}
+          </Flex>
 
           <button onClick={() => handleUpdate(product.product_id)}>
             Update
           </button>
-        </div>
+        </Flex>
       </Drawer>
     </Space>
   );
