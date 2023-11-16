@@ -19,6 +19,7 @@ export const createProduct = asyncHandler(async (req, res) => {
     db.query(q1, [promotion_id], (err, data) => {
       if (err) return res.json(err);
       new_price = (old_price * (100 - data[0].discount)) / 100;
+
       const q =
         "INSERT INTO products(`product_name`, `old_price`, `description`,`stock`, `image_url`, `category_id` , `promotion_id`, `new_price`) VALUES (?)";
       const values = [

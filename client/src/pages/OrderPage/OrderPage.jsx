@@ -14,8 +14,8 @@ const OrderPage = () => {
   const { user, totalPrice, cartItems, setShowCart } = useContext(Context);
   const [districtOptions, setDistrictOptions] = useState([]);
   const [wardOptions, setWardOptions] = useState([]);
-  const [selectedProvince, setSelectedProvince] = useState("");
-  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedProvince, setSelectedProvince] = useState({});
+  const [selectedDistrict, setSelectedDistrict] = useState({});
   const [selectedWard, setSelectedWard] = useState("");
   const [detailedAddress, setDetailedAddress] = useState("");
   const navigate = useNavigate();
@@ -29,6 +29,7 @@ const OrderPage = () => {
         .post("/order/add-to-order", {
           products: cartItems,
           total_price: totalPrice,
+          address_order: `${detailedAddress}, ${selectedWard}, ${selectedDistrict}, ${selectedProvince}`,
         })
         .then((res) => {
           alert(res.data);
@@ -42,6 +43,11 @@ const OrderPage = () => {
       return district.province_code === parseInt(selectedProvinceCode);
     });
 
+    const province = Provinces.find(
+      (province) => province.code === parseInt(selectedProvinceCode)
+    );
+
+    setSelectedProvince(province.name);
     setDistrictOptions(filteredDistricts);
     setWardOptions([]);
     setSelectedWard("");
@@ -51,6 +57,12 @@ const OrderPage = () => {
     const filteredWards = Wards.filter(
       (ward) => ward.district_code === parseInt(selectedDistrictCode)
     );
+
+    const district = Districts.find(
+      (district) => district.code === parseInt(selectedDistrictCode)
+    );
+
+    setSelectedDistrict(district.name);
     setSelectedWard("");
     setWardOptions(filteredWards);
   };
@@ -105,7 +117,6 @@ const OrderPage = () => {
                 id="province"
                 value={selectedProvince}
                 onChange={(e) => {
-                  setSelectedProvince(e.target.value);
                   handleProvinceChange(e.target.value);
                 }}
               >
@@ -131,7 +142,6 @@ const OrderPage = () => {
                 id="district"
                 value={selectedDistrict}
                 onChange={(e) => {
-                  setSelectedDistrict(e.target.value);
                   handleDistrictChange(e.target.value);
                 }}
               >
