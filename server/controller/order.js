@@ -4,10 +4,11 @@ import asyncHandler from "express-async-handler";
 export const addToOrder = asyncHandler((req, res) => {
   const { user_id } = req.user;
 
-  const { products, total_price } = req.body;
+  const { products, total_price, address_order } = req.body;
 
-  const q = "INSERT INTO orders(`user_id`, `total_price`) VALUES (?,?)";
-  db.query(q, [user_id, total_price], (err, data) => {
+  const q =
+    "INSERT INTO orders(`user_id`, `total_price`, `address_order`) VALUES (?,?, ?)";
+  db.query(q, [user_id, total_price, address_order], (err, data) => {
     if (err) return res.json(err);
     const orderId = data.insertId;
     products.forEach((product) => {
