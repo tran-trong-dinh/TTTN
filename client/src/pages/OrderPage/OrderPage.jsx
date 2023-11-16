@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "./OrderPage.scss";
 import { Context } from "../../utils/context";
 import { useNavigate } from "react-router-dom";
@@ -7,63 +7,19 @@ import { BiUserCircle } from "react-icons/bi";
 import { AiOutlineMail } from "react-icons/ai";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { IoLocationSharp } from "react-icons/io5";
-
+import { Provinces } from "../../utils/location/provinces";
+import { Districts } from "../../utils/location/districts";
+import { Wards } from "../../utils/location/wards";
 const OrderPage = () => {
   const { user, totalPrice, cartItems, setShowCart } = useContext(Context);
+  const [districtOptions, setDistrictOptions] = useState([]);
+  const [wardOptions, setWardOptions] = useState([]);
+  const [selectedProvince, setSelectedProvince] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedWard, setSelectedWard] = useState("");
+  const [detailedAddress, setDetailedAddress] = useState("");
   const navigate = useNavigate();
-  // const host = "https://provinces.open-api.vn/api/";
-  // const callAPI = (api) => {
-  //   return axios.get(api).then((response) => {
-  //     renderData(response.data, "province");
-  //   });
-  // };
-  // callAPI("https://provinces.open-api.vn/api/?depth=1");
-  // const callApiDistrict = (api) => {
-  //   return axios.get(api).then((response) => {
-  //     renderData(response.data.districts, "district");
-  //   });
-  // };
-  // const callApiWard = (api) => {
-  //   return axios.get(api).then((response) => {
-  //     renderData(response.data.wards, "ward");
-  //   });
-  // };
 
-  //  const renderData = (array, select) => {
-  //   let row = ' <option disable value="">chọn</option>';
-  //   array.forEach((element) => {
-  //     row += `<option value="${element.code}">${element.name}</option>`;
-  //   });
-  //   document.querySelector("#" + select).innerHTML = row;
-  // };
-
-  // $("#province").change(() => {
-  //   callApiDistrict(host + "p/" + $("#province").val() + "?depth=2");
-  //   printResult();
-  // });
-  // $("#district").change(() => {
-  //   callApiWard(host + "d/" + $("#district").val() + "?depth=2");
-  //   printResult();
-  // });
-  // $("#ward").change(() => {
-  //   printResult();
-  // });
-
-  // const printResult = () => {
-  //   if (
-  //     $("#district").val() != "" &&
-  //     $("#province").val() != "" &&
-  //     $("#ward").val() != ""
-  //   ) {
-  //     let result =
-  //       $("#province option:selected").text() +
-  //       " | " +
-  //       $("#district option:selected").text() +
-  //       " | " +
-  //       $("#ward option:selected").text();
-  //     $("#result").text(result);
-  //   }
-  // };
   const handlePay = () => {
     setShowCart(false);
     if (!user) {
@@ -80,6 +36,23 @@ const OrderPage = () => {
           window.location.reload();
         });
     }
+  };
+  const handleProvinceChange = (selectedProvinceCode) => {
+    const filteredDistricts = Districts.filter((district) => {
+      return district.province_code === parseInt(selectedProvinceCode);
+    });
+
+    setDistrictOptions(filteredDistricts);
+    setWardOptions([]);
+    setSelectedWard("");
+    setSelectedDistrict("");
+  };
+  const handleDistrictChange = (selectedDistrictCode) => {
+    const filteredWards = Wards.filter(
+      (ward) => ward.district_code === parseInt(selectedDistrictCode)
+    );
+    setSelectedWard("");
+    setWardOptions(filteredWards);
   };
   return (
     <div className="order-container">
@@ -128,17 +101,49 @@ const OrderPage = () => {
               {/* <p className="input-edit-profile">{user?.data?.full_name}</p> */}
               <select
                 className="input-edit-profile"
-                name=""
+                name="province"
                 id="province"
-              ></select>
+                value={selectedProvince}
+                onChange={(e) => {
+                  setSelectedProvince(e.target.value);
+                  handleProvinceChange(e.target.value);
+                }}
+              >
+                <option value="">--- Chọn tỉnh ---</option>
+                {Provinces &&
+                  Provinces.map((province, idx) => {
+                    return (
+                      <option key={idx} value={province.code}>
+                        {province.name}
+                      </option>
+                    );
+                  })}
+              </select>
             </div>
             <div className="edit-profile-info">
               <div className="heading">
                 <h2>Huyện</h2>
               </div>
               {/* <p className="input-edit-profile">{user?.data?.full_name}</p> */}
-              <select className="input-edit-profile" name="" id="district">
-                <option value="">chọn quận</option>
+              <select
+                className="input-edit-profile"
+                name="district"
+                id="district"
+                value={selectedDistrict}
+                onChange={(e) => {
+                  setSelectedDistrict(e.target.value);
+                  handleDistrictChange(e.target.value);
+                }}
+              >
+                <option value="">--- Chọn quận/huyện ---</option>
+                {districtOptions &&
+                  districtOptions.map((district, idx) => {
+                    return (
+                      <option key={idx} value={district.code}>
+                        {district.name}
+                      </option>
+                    );
+                  })}
               </select>
             </div>
             <div className="edit-profile-info">
@@ -146,8 +151,24 @@ const OrderPage = () => {
                 <h2>Xã</h2>
               </div>
               {/* <p className="input-edit-profile">{user?.data?.full_name}</p> */}
-              <select className="input-edit-profile" name="" id="ward">
-                <option value="">chọn phường</option>
+              <select
+                className="input-edit-profile"
+                name="ward"
+                id="ward"
+                value={selectedWard}
+                onChange={(e) => {
+                  setSelectedWard(e.target.value);
+                }}
+              >
+                <option value="">--- Chọn xã/phường ---</option>
+                {wardOptions &&
+                  wardOptions.map((ward, idx) => {
+                    return (
+                      <option key={idx} value={ward.name}>
+                        {ward.name}
+                      </option>
+                    );
+                  })}
               </select>
             </div>
 
@@ -156,7 +177,13 @@ const OrderPage = () => {
                 <h2>Địa chỉ cụ thể</h2>
                 <IoLocationSharp />
               </div>
-              <input className="input-edit-profile"></input>
+              <input
+                className="input-edit-profile"
+                name="ward"
+                id="ward"
+                value={detailedAddress}
+                onChange={(e) => setDetailedAddress(e.target.value)}
+              ></input>
             </div>
           </div>
         </div>

@@ -9,11 +9,13 @@
     gap: 20px;
 
     .info-order {
+      margin-top: 40px;
       display: flex;
       flex-direction: column;
       border: #8e2de2 1px solid;
       height: 100%;
       padding: 20px 60px;
+      border-radius: 10px;
       gap: 20px;
       .products {
         display: flex;
