@@ -36,6 +36,7 @@ function Products() {
   const [updateOldPrice, setUpdateOldPrice] = useState("");
   const [updateDescription, setUpdateDescription] = useState("");
   const [updateImageUrl, setUpdateImageUrl] = useState("");
+  const [updateStock, setUpdateStock] = useState(0);
   const handleUpload = async (e) => {
     const files = e.target.files;
     const data = new FormData();
@@ -52,6 +53,7 @@ function Products() {
     setUpdateOldPrice(product.old_price);
     setUpdateDescription(product.description);
     setUpdateImageUrl(product.image_url);
+    setUpdateStock(product.stock);
   }, [product]);
   const handleSubmit = () => {
     console.log(typeof stock);
@@ -91,6 +93,7 @@ function Products() {
         old_price: updateOldPrice,
         description: updateDescription,
         image_url: updateImageUrl,
+        stock: updateStock,
       })
       .then((res) => {
         alert("update success");
@@ -320,6 +323,14 @@ function Products() {
               }}
             />
             {updateImageUrl && <Image width={200} src={updateImageUrl} />}
+          </Flex>
+          <Flex vertical gap={5}>
+            <label>Stock</label>
+            <Input
+              type="text"
+              value={updateStock}
+              onChange={(e) => setUpdateStock(e.target.value)}
+            />
           </Flex>
 
           <button onClick={() => handleUpdate(product.product_id)}>
