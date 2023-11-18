@@ -19,15 +19,28 @@ export const getPromotions = asyncHandler((req, res) => {
   });
 });
 
+export const getPromotion = asyncHandler((req, res) => {
+  const { id } = req.params;
+  const q = "SELECT * FROM promotions WHERE promotion_id = ?";
+  db.query(q, [id], (err, data) => {
+    if (err) return res.json(err);
+    return res.status(200).json(data[0]);
+  });
+});
+
 export const updatePromotion = asyncHandler((req, res) => {
   const { id } = req.params;
-  const { promotion_code, discount } = req.body;
+  const { promotion_code, discount, start_date, end_date } = req.body;
   const q =
-    "UPDATE promotions SET `promotion_code` = ?, `discount` = ? WHERE promotion_id = ?";
-  db.query(q, [promotion_code, discount, id], (err, data) => {
-    if (err) return res.json(err);
-    return res.status(200).json("Promotion has been updated");
-  });
+    "UPDATE promotions SET `promotion_code` = ?, `discount` = ?, `start_date` = ?, `end_date` = ? WHERE promotion_id = ?";
+  db.query(
+    q,
+    [promotion_code, discount, start_date, end_date, id],
+    (err, data) => {
+      if (err) return res.json(err);
+      return res.status(200).json("Promotion has been updated");
+    }
+  );
 });
 
 export const deletePromotion = asyncHandler((req, res) => {
