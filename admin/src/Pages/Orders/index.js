@@ -31,7 +31,7 @@ function Orders() {
           },
           {
             title: "Address",
-            dataIndex: "address",
+            dataIndex: "address_order",
           },
           {
             title: "Phone",
