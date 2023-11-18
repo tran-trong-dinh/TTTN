@@ -115,7 +115,6 @@ const OrderPage = () => {
                 className="input-edit-profile"
                 name="province"
                 id="province"
-                value={selectedProvince}
                 onChange={(e) => {
                   handleProvinceChange(e.target.value);
                 }}
@@ -140,7 +139,6 @@ const OrderPage = () => {
                 className="input-edit-profile"
                 name="district"
                 id="district"
-                value={selectedDistrict}
                 onChange={(e) => {
                   handleDistrictChange(e.target.value);
                 }}
