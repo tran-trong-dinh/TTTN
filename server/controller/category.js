@@ -22,13 +22,21 @@ export const getCategories = asyncHandler((req, res) => {
   });
 });
 
+export const getCategorie = asyncHandler((req, res) => {
+  const q = "SELECT * FROM categories WHERE category_id = ?";
+  db.query(q, [req.params.id], (err, data) => {
+    if (err) return res.json(err);
+    return res.status(200).json(data[0]);
+  });
+});
+
 export const updateCategory = asyncHandler((req, res) => {
   const q =
-    "UPDATE categories SET name = ?, img_category = ? WHERE category_id = ?";
+    "UPDATE categories SET category_name = ?, img_category = ? WHERE category_id = ?";
 
   db.query(
     q,
-    [req.body.name, req.body.img_category, req.params.id],
+    [req.body.category_name, req.body.img_category, req.params.id],
     (err, data) => {
       if (err) return res.json(err);
       return res.status(200).json("Category has been updated");
