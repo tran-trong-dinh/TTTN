@@ -2,6 +2,7 @@ import {
   Avatar,
   Button,
   Drawer,
+  Flex,
   Form,
   Image,
   Input,
@@ -137,14 +138,23 @@ function Category() {
             dataIndex: "category_id",
             key: "x",
             render: (category_id) => (
-              <>
-                <button onClick={() => handleRemove(category_id)}>
+              <Flex gap={5} align="center">
+                <Button
+                  type="primary"
+                  danger
+                  ghost
+                  onClick={() => handleRemove(category_id)}
+                >
                   Delete
-                </button>
-                <button onClick={() => handleOpenUpdate(category_id)}>
+                </Button>
+                <Button
+                  type="primary"
+                  ghost
+                  onClick={() => handleOpenUpdate(category_id)}
+                >
                   Update
-                </button>
-              </>
+                </Button>
+              </Flex>
             ),
           },
         ]}
@@ -203,28 +213,29 @@ function Category() {
           style={{ maxWidth: 600 }}
           initialValues={{ remember: true }}
         >
-          <div>
-            <label>Category Name:</label>
-            <input
-              type="text"
-              className="input"
-              value={category?.category_name}
-              onChange={(e) =>
-                setCategory({ ...category, category_name: e.target.value })
-              }
-            />
-          </div>
+          <Flex vertical gap={10}>
+            <Flex align="center">
+              <label>Category Name:</label>
+              <Input
+                type="text"
+                value={category?.category_name}
+                onChange={(e) =>
+                  setCategory({ ...category, category_name: e.target.value })
+                }
+              />
+            </Flex>
 
-          <div>
-            <label>Category Image</label>
+            <Flex gap={10} vertical>
+              <label>Category Image</label>
+              <div>
+                <input type="file" onChange={handleUpdateImage} />
+              </div>
+            </Flex>
+
             <div>
-              <input type="file" onChange={handleUpdateImage} />
+              <Button onClick={handleUpdate}>Update</Button>
             </div>
-          </div>
-
-          <div>
-            <button onClick={handleUpdate}>Update</button>
-          </div>
+          </Flex>
         </Form>
       </Drawer>
     </Space>

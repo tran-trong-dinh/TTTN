@@ -3,12 +3,14 @@ import {
   Button,
   DatePicker,
   Drawer,
+  Flex,
   Form,
   Input,
   Space,
   Table,
   Typography,
 } from "antd";
+import "./promotions.scss";
 import { useEffect, useState } from "react";
 
 import axios from "axios";
@@ -115,14 +117,23 @@ function Promotions() {
             dataIndex: "promotion_id",
             key: "x",
             render: (promotion_id) => (
-              <>
-                <button onClick={() => handleRemove(promotion_id)}>
+              <Flex gap={10}>
+                <Button
+                  type="primary"
+                  danger
+                  ghost
+                  onClick={() => handleRemove(promotion_id)}
+                >
                   Delete
-                </button>
-                <button onClick={() => handleOpenUpdate(promotion_id)}>
+                </Button>
+                <Button
+                  type="primary"
+                  ghost
+                  onClick={() => handleOpenUpdate(promotion_id)}
+                >
                   Update
-                </button>
-              </>
+                </Button>
+              </Flex>
             ),
           },
         ]}
@@ -195,74 +206,77 @@ function Promotions() {
           style={{ maxWidth: 600 }}
           initialValues={{ remember: true }}
         >
-          <div>
-            <label>Promotion Code:</label>
-            <input
-              type="text"
-              className="input"
-              value={detailPromotion?.promotion_code}
-              onChange={(e) =>
-                setDetailPromotion({
-                  ...detailPromotion,
-                  promotion_code: e.target.value,
-                })
-              }
-            />
-          </div>
+          <Flex vertical gap={10} justify="center">
+            <div>
+              <label>Promotion Code:</label>
+              <input
+                type="text"
+                className="input"
+                value={detailPromotion?.promotion_code}
+                onChange={(e) =>
+                  setDetailPromotion({
+                    ...detailPromotion,
+                    promotion_code: e.target.value,
+                  })
+                }
+              />
+            </div>
 
-          <div>
-            <label>Discount:</label>
-            <input
-              type="text"
-              className="input"
-              value={detailPromotion?.discount}
-              onChange={(e) =>
-                setDetailPromotion({
-                  ...detailPromotion,
-                  discount: e.target.value,
-                })
-              }
-            />
-          </div>
+            <div>
+              <label>Discount:</label>
+              <input
+                type="text"
+                className="input"
+                value={detailPromotion?.discount}
+                onChange={(e) =>
+                  setDetailPromotion({
+                    ...detailPromotion,
+                    discount: e.target.value,
+                  })
+                }
+              />
+            </div>
 
-          <div>
-            <label>Start Date:</label>
-            <input
-              type="date"
-              className="input"
-              value={detailPromotion?.start_date?.slice(0, 10)}
-              onChange={(e) =>
-                setDetailPromotion({
-                  ...detailPromotion,
-                  start_date: e.target.value,
-                })
-              }
-            />
-          </div>
+            <div>
+              <label>Start Date:</label>
+              <input
+                type="date"
+                className="input"
+                value={detailPromotion?.start_date?.slice(0, 10)}
+                onChange={(e) =>
+                  setDetailPromotion({
+                    ...detailPromotion,
+                    start_date: e.target.value,
+                  })
+                }
+              />
+            </div>
 
-          <div>
-            <label>End Date:</label>
-            <input
-              type="date"
-              className="input"
-              value={detailPromotion?.end_date?.slice(0, 10)}
-              onChange={(e) =>
-                setDetailPromotion({
-                  ...detailPromotion,
-                  end_date: e.target.value,
-                })
-              }
-            />
-          </div>
+            <div>
+              <label>End Date:</label>
+              <input
+                type="date"
+                className="input"
+                value={detailPromotion?.end_date?.slice(0, 10)}
+                onChange={(e) =>
+                  setDetailPromotion({
+                    ...detailPromotion,
+                    end_date: e.target.value,
+                  })
+                }
+              />
+            </div>
 
-          <div>
-            <button
-              className="button"
-              onClick={() => handleUpdate(detailPromotion?.promotion_id)}
-            >
-              Update
-            </button>
-          </div>
+            <div>
+              <Button
+                type="primary"
+                style={{ width: "100%" }}
+                onClick={() => handleUpdate(detailPromotion?.promotion_id)}
+              >
+                Update
+              </Button>
+            </div>
+          </Flex>
         </Form>
       </Drawer>
     </Space>

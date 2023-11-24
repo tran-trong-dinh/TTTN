@@ -13,7 +13,7 @@ import {
   Typography,
 } from "antd";
 import { useEffect, useState } from "react";
-
+import "./products.scss";
 import axios from "axios";
 import TextArea from "antd/es/input/TextArea";
 
@@ -182,12 +182,23 @@ function Products() {
             dataIndex: "product_id",
             key: "x",
             render: (product_id) => (
-              <>
-                <button onClick={() => handleRemove(product_id)}>Delete</button>
-                <button onClick={() => handleOpenUpdate(product_id)}>
+              <Flex align="center" gap={5}>
+                <Button
+                  type="primary"
+                  danger
+                  ghost
+                  onClick={() => handleRemove(product_id)}
+                >
+                  Delete
+                </Button>
+                <Button
+                  type="primary"
+                  ghost
+                  onClick={() => handleOpenUpdate(product_id)}
+                >
                   Update
-                </button>
-              </>
+                </Button>
+              </Flex>
             ),
           },
         ]}
@@ -333,7 +344,10 @@ function Products() {
             />
           </Flex>
 
-          <button onClick={() => handleUpdate(product.product_id)}>
+          <button
+            className="btn-update"
+            onClick={() => handleUpdate(product.product_id)}
+          >
             Update
           </button>
         </Flex>

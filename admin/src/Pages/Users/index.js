@@ -1,4 +1,4 @@
-import { Avatar, Rate, Space, Table, Typography } from "antd";
+import { Avatar, Button, Rate, Space, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
 
 import axios from "axios";
@@ -54,7 +54,14 @@ function Users() {
             dataIndex: "user_id",
             key: "x",
             render: (user_id) => (
-              <button onClick={() => handleRemove(user_id)}>Delete</button>
+              <Button
+                type="primary"
+                danger
+                ghost
+                onClick={() => handleRemove(user_id)}
+              >
+                Delete
+              </Button>
             ),
           },
         ]}
